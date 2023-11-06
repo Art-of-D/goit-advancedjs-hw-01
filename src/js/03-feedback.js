@@ -1,3 +1,5 @@
+import throttle from "lodash.throttle";
+
 let email = document.querySelector("[name=email]");
 let message = document.querySelector("[name=message]");
 const submitAuth = document.querySelector(".feedback-form");
@@ -11,15 +13,17 @@ function autoGetItems(){
     message.value = localStorage.getItem("message") ?? " ";
 }
 
-function handlerBackUp(event){
-    if (event.target.name === "email"){
-        backUp("email", email.value);
-    } else {
-        backUp("message", message.value);
-    }
-}
-function backUp(key, value){
-    localStorage.setItem(key, value);
+const throttleBackUp = throttle( function(key, value) {
+    localStorage.setItem(key, JSON.stringify(value));
+}, 500);
+
+function handlerBackUp(event) {
+    const user = {
+      email: email.value,
+      message: message.value,
+    };
+
+    throttleBackUp("feedback-form-state", user);
 }
 
 function checkAndSend(event){
@@ -34,16 +38,11 @@ function checkAndSend(event){
 }
 
 function sender(){
-    let user = {};
-    user.email = email.value;
-    user.message = message.value;
+    let user = {
+        "email": email.value,
+        "message": message.value,
+    };
     console.log(user);
     submitAuth.reset();
-    removeItems(["email", "message"]);
-}
-
-function removeItems(arr){
-    for (key in arr){
-        localStorage.removeItem(key);
-    }
+    localStorage.removeItem("feedback-form-state");
 }
