@@ -28,14 +28,3 @@ gallery.insertAdjacentHTML("afterbegin", imgsMarkup);
         captionsData:'alt',
         captionDelay: 250,
     });
-gallery.addEventListener("click", eventHandler)
-
-function eventHandler(evt) {
-    evt.preventDefault();
-
-    if (!(evt.target.classList.contains("gallery__image"))) {
-        return;
-    }
-   
-    zoomedImg.open(evt.target);
-}

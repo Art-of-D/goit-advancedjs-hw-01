@@ -1,5 +1,6 @@
 import throttle from "lodash.throttle";
 
+const FB_FORM = "feedback-form-state";
 let email = document.querySelector("[name=email]");
 let message = document.querySelector("[name=message]");
 const submitAuth = document.querySelector(".feedback-form");
@@ -9,8 +10,9 @@ message.addEventListener("input", handlerBackUp);
 autoGetItems();
 
 function autoGetItems(){
-    email.value = localStorage.getItem("email") ?? " ";
-    message.value = localStorage.getItem("message") ?? " ";
+    const fbFormValue = JSON.parse(localStorage.getItem(FB_FORM));
+    email.value = fbFormValue.email ?? " ";
+    message.value = fbFormValue.message ?? " ";
 }
 
 const throttleBackUp = throttle( function(key, value) {
@@ -23,7 +25,7 @@ function handlerBackUp(event) {
       message: message.value,
     };
 
-    throttleBackUp("feedback-form-state", user);
+    throttleBackUp(FB_FORM, user);
 }
 
 function checkAndSend(event){
