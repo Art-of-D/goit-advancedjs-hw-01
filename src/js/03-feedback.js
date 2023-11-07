@@ -10,7 +10,7 @@ message.addEventListener("input", handlerBackUp);
 autoGetItems();
 
 function autoGetItems(){
-    const fbFormValue = JSON.parse(localStorage.getItem(FB_FORM));
+    const fbFormValue = JSON.parse(localStorage.getItem(FB_FORM)) ?? {};
     email.value = fbFormValue.email ?? " ";
     message.value = fbFormValue.message ?? " ";
 }
